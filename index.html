@@ -652,39 +652,56 @@
       }
     </script>
     <script>
-      // 获取页面的滚动容器
-      const smoothWrapper = document.getElementById("smooth-wrapper");
+    // 获取页面的滚动容器
+    const smoothWrapper = document.getElementById("smooth-wrapper");
 
-      // 设置滚动容器的滚动速度
-      const scrollSpeed = 0.2; // 调整滚动速度，值越小越慢
+    // 根据屏幕宽度设置不同的滚动速度
+    function setScrollSpeed() {
+      const screenWidth = window.innerWidth;
 
-      // 初始化滚动位置和目标位置
-      let currentScroll = 0;
-      let targetScroll = 0;
+      let scrollSpeed;
 
-      // 监听页面滚动事件
-      window.addEventListener("scroll", () => {
-        // 更新目标滚动位置
-        targetScroll = window.scrollY;
-      });
-
-      // 模拟滚动平滑效果
-      function smoothScroll() {
-        // 计算滚动差值
-        const scrollDiff = targetScroll - currentScroll;
-
-        // 计算下一帧的滚动位置
-        currentScroll += scrollDiff * scrollSpeed;
-
-        // 应用滚动效果到滚动容器
-        smoothWrapper.style.transform = `translateY(${-currentScroll}px)`;
-
-        // 请求下一帧
-        requestAnimationFrame(smoothScroll);
+      if (screenWidth < 768) {
+        // 在屏幕宽度小于768px时，设置较快的滚动速度
+        scrollSpeed = 0.2;
+      } else {
+        // 在屏幕宽度大于等于768px时，设置较慢的滚动速度
+        scrollSpeed = 0.05;
       }
 
-      // 启动滚动平滑效果
-      smoothScroll();
-    </script>
+      return scrollSpeed;
+    }
+
+    // 初始化滚动位置和目标位置
+    let currentScroll = 0;
+    let targetScroll = 0;
+
+    // 监听页面滚动事件
+    window.addEventListener("scroll", () => {
+      // 更新目标滚动位置
+      targetScroll = window.scrollY;
+    });
+
+    // 模拟滚动平滑效果
+    function smoothScroll() {
+      // 获取当前滚动速度
+      const scrollSpeed = setScrollSpeed();
+
+      // 计算滚动差值
+      const scrollDiff = targetScroll - currentScroll;
+
+      // 计算下一帧的滚动位置
+      currentScroll += scrollDiff * scrollSpeed;
+
+      // 应用滚动效果到滚动容器
+      smoothWrapper.style.transform = `translateY(${-currentScroll}px)`;
+
+      // 请求下一帧
+      requestAnimationFrame(smoothScroll);
+    }
+
+    // 启动滚动平滑效果
+    smoothScroll();
+  </script>
   </body>
 </html>
